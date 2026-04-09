@@ -2,6 +2,20 @@
 
 ![CI](https://github.com/rickhallett/thepit/actions/workflows/ci.yml/badge.svg)
 
+```mermaid
+graph TD
+    USER["Users"] --> NEXT["Next.js 16 -- App Router"]
+    NEXT --> AI["Vercel AI SDK"]
+    AI --> OAI["OpenAI"]
+    AI --> ANT["Anthropic"]
+    AI --> GOO["Google"]
+    AI --> XAI["xAI"]
+    NEXT --> DB[("Neon Postgres -- 22 tables")]
+    NEXT --> AUTH["Clerk -- Auth"]
+    NEXT --> PAY["Stripe -- Credits"]
+    NEXT -->|"SSE"| STREAM["Real-time Streaming"]
+```
+
 A multi-agent AI evaluation platform. Structured contests between agent configurations with observable traces, explicit scoring, failure tagging, and cost visibility. Built to make agent performance legible, comparable, governable, and economically inspectable.
 
 Define tasks, run agent configurations against them, evaluate outputs with explicit rubrics, record failures by taxonomy, and inspect cost and latency per run. Real-time streaming via SSE, side-by-side comparisons, trace replay, and audit logs.
