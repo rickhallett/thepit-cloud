@@ -1,6 +1,23 @@
-# The Pit
+<p align="center">
+  <h1 align="center">The Pit</h1>
+  <p align="center">
+    Multi-agent AI evaluation platform
+    <br />
+    <em>1,289 tests. 96% coverage. TypeScript strict. Zero lint errors.</em>
+  </p>
+</p>
 
-![CI](https://github.com/rickhallett/thepit/actions/workflows/ci.yml/badge.svg)
+<p align="center">
+  <a href="https://github.com/rickhallett/thepit/actions"><img src="https://github.com/rickhallett/thepit/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <img src="https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" alt="React" />
+  <img src="https://img.shields.io/badge/tests-1%2C289-brightgreen" alt="Tests" />
+  <img src="https://img.shields.io/badge/coverage-96%25-brightgreen" alt="Coverage" />
+  <img src="https://img.shields.io/badge/Go-CLI%20tooling-00ADD8?logo=go&logoColor=white" alt="Go" />
+</p>
+
+---
 
 A multi-agent AI evaluation platform. Structured contests between agent configurations with observable traces, explicit scoring, failure tagging, and cost visibility. Built to make agent performance legible, comparable, governable, and economically inspectable.
 
