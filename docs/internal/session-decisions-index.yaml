@@ -6,9 +6,9 @@
 # The full log is for provenance and archaeology.
 # Recent SDs shown here - read full file for deeper history.
 
-generated: "2026-03-16T09:00:00.000Z"
-total_decisions: 329
-range: "SD-001 to SD-330"
+generated: "2026-07-04T09:00:00.000Z"
+total_decisions: 330
+range: "SD-001 to SD-331"
 note: "Chain carries forward from tspit (pilot study). noopit is thepit-v2 - diverged at SD-278."
 
 # Standing orders that carry forward (always active)
@@ -132,3 +132,7 @@ recent:
     label: "run-pipeline-abandoned"
     summary: "M1-M3 run/evaluation/cost pipeline abandoned. Orders miscommunicated, plans departed from sensible reality. The Pit returns to development of the core product: multi-agent debate arena. Roadmap refocused on platform hardening, Ask The Pit, AI Gateway, tournaments, spectator chat. Closed issues #102, #104, #106, #109, #18. Archived old roadmap to docs/deep-archive/2026-04-01-run-pipeline-abandoned/. New roadmap: docs/roadmap.md."
     status: "PERMANENT"
+  - id: SD-331
+    label: "campaign-overlay-boot"
+    summary: "Boot contract restructured into a layered boot sequence: L0 kernel (identity, boot rules, engineering loop), L1 machinery manifest (enforcement inventory), L2 campaign overlay (docs/internal/campaign/active.md, SessionStart-injected, dormant by default), L3 reference modules (on demand). Orientation lives in the prompt; enforcement lives in hooks and scripts. The YAML HUD is campaign-gated: plain register opens with a one-line readback; a full HUD exists only under an active campaign and derives from real state. Scaffold-then-distill codified as the campaign lifecycle: adopt (retirement criteria fixed at adoption), industrialize, distill, retire. Naval frame (2026-02-24 SD-120 to 2026-03-10 668c23b) retroactively archived as the first campaign with frame, distillation, and retro. Campaign register is subordinate to the Operator's fluency protocol and never overrides enforcement. Origin: full excavation of thepit + noopit + midgets governance history, GitHub issue #152."
+    status: "ACTIVE"

@@ -1,16 +1,26 @@
 # Agent's Orders
 
 This file is the boot contract for agents working in this repo.
-Read this first. Use linked references only when the task needs them.
+It is a layered boot sequence [SD-331]:
 
-## True North
+- **Layer 0 (kernel)** and **Layer 1 (machinery manifest)** load every session.
+- **Layer 2 (campaign overlay)** is injected at session start from
+  `docs/internal/campaign/active.md`. Dormant by default.
+- **Layer 3 (reference modules)** is read on demand only.
+
+Orientation lives in this file; enforcement lives in hooks and scripts.
+If a rule matters, something with an exit code backs it.
+
+## Layer 0: Kernel
+
+### True North
 
 - **Primary objective:** get hired - proof over claims [SD-309]
 - **Override:** truth over hiring signal [SD-134]
 
 If proof and spin conflict, choose truth.
 
-## Boot Rules
+### Boot Rules
 
 These apply in every session unless the Operator explicitly overrides them.
 
@@ -18,8 +28,9 @@ These apply in every session unless the Operator explicitly overrides them.
 - Historical records are append-only; do not rewrite the chain [SD-266]
 - Estimates use agent-minutes, not human-speed guesses [SD-268]
 - Change is ready only when the gate is green
-- Open every address to the Operator with the YAML HUD below
-- Read back your understanding before acting [SD-315]
+- Open every address to the Operator with a one-line readback of the order as
+  understood [SD-315]. When a campaign is active, open with the campaign HUD
+  instead [SD-331]
 - Use `printf`, never `echo`, when piping literal values to the CLI
 - Python uses `uv` exclusively [SD-310]
 - New tasks go through `backlog add "title" --priority P [--epic E] [--tag T]`
@@ -35,21 +46,7 @@ These apply in every session unless the Operator explicitly overrides them.
 - No `git stash`, ever [SD-325]
 - End the session with no unpushed commits
 
-## YAML HUD
-
-Every address to the Operator opens with:
-
-```yaml
-watch_officer: <agent>
-weave_mode: <tight|loose>
-register: <formal|exploration|execution>
-tempo: <full-sail|sustainable-pace|tacking|stop-the-line|SEV-1>
-true_north: "hired = proof > claim"
-bearing: <current heading>
-last_known_position: <last completed task>
-```
-
-## Engineering Loop
+### Engineering Loop
 
 **Read -> Verify -> Write -> Execute -> Confirm**
 
@@ -58,7 +55,12 @@ last_known_position: <last completed task>
 - Spec or plan before implementation
 - Human review happens after execution, not during, unless the task is taste-bound
 
-## Work Tracking
+## Layer 1: Machinery Manifest
+
+Enforcement inventory. Gates and hooks are hard barriers; everything else in
+this layer is convention that agents must follow but nothing blocks.
+
+### Work Tracking
 
 Use the backlog CLI instead of editing YAML directly.
 
@@ -73,18 +75,18 @@ backlog close BL-001 -r "reason"
 
 Data lives in `docs/internal/backlog.yaml`.
 
-## GitHub Workflow
+### GitHub Workflow
 
 GitHub Issues and PRs are the external record of engineering discipline.
 
-### Issues
+#### Issues
 
 - External-facing work gets a GitHub issue
 - Issue bodies include: problem, acceptance criteria, scope boundary
 - Estimates use complexity and risk, never time
 - Labels: `feature`, `bug`, `refactor`, `chore`, `tech-debt`, `infra`, `portfolio`, `research`, `platform`, `community`, `blocked`, `needs-audit`
 
-### Branches
+#### Branches
 
 - Never commit directly to `main`
 - Branches use `feat/`, `fix/`, `refactor/`, `chore/`
@@ -97,7 +99,7 @@ Example:
 git worktree add -b feat/42-arena-builder ../thepit-42-arena-builder main
 ```
 
-### PRs
+#### PRs
 
 - 1 PR = 1 concern
 - Squash merge to keep history clean
@@ -106,20 +108,20 @@ git worktree add -b feat/42-arena-builder ../thepit-42-arena-builder main
 - Add screenshots or GIFs for UI changes
 - Review attestation belongs in the PR body or comments
 
-### Sequence
+#### Sequence
 
 ```text
 issue -> worktree -> develop -> gate -> PR -> review -> squash merge -> post-merge verify -> close issue -> remove worktree
 ```
 
-## Deployment
+### Deployment
 
 - Git-triggered deployments are **disabled** on Vercel (burns server budget)
 - Deploy manually with `vercel --prod` from the CLI
 - Set env vars with `printf 'value' | vercel env add NAME production --force`
 - Never use `echo` for piping env values (use `printf`)
 
-## Gate
+### Gate
 
 The gate is survival, not optimisation.
 
@@ -129,7 +131,7 @@ pnpm run test:ci
 
 If the gate fails, the change is not ready.
 
-## Pitcommit
+### Pitcommit
 
 Invocation:
 
@@ -171,7 +173,7 @@ Key behavior:
 - `.gauntlet/` is ephemeral and gitignored
 - `--no-verify` is emergency-only
 
-## Conventions
+### Conventions
 
 - TypeScript, Next.js 16, Tailwind, Drizzle ORM, Neon Postgres
 - Tests live under `tests/`
@@ -179,7 +181,7 @@ Key behavior:
 - YAML is the default structured-data format [SD-258]
 - Use 2-space indentation
 
-## Filesystem Map
+### Filesystem Map
 
 Read depth 1 every session. Read deeper only when relevant.
 
@@ -201,6 +203,7 @@ Read depth 1 every session. Read deeper only when relevant.
 |- docs/                specs, decisions, internal docs
 |  |- decisions/        session-scoped decision files
 |  |- internal/         operational references and logs
+|  |  |- campaign/      campaign overlay: active.md + archive/
 |- .github/workflows/   CI
 ```
 
@@ -211,7 +214,32 @@ BFS rule [SD-195]:
 - Depth 3+: deliberate research only
 - Read `docs/internal/session-decisions-index.yaml`, not the full chain, for orientation
 
-## Recent Orientation
+## Layer 2: Campaign Overlay
+
+A campaign is a deliberately adopted operating frame (register, roles,
+vocabulary, HUD) scoped to a sustained push, then distilled and retired.
+The naval frame (2026-02-24 to 2026-03-10) was the first instance.
+
+- `docs/internal/campaign/active.md` is the only file this layer loads.
+  A SessionStart hook injects it (`.claude/settings.local.json`; `.claude/`
+  is dark and stays untracked, so the hook is per-machine config). Agents
+  without the hook read `active.md` at boot.
+- Dormant state: plain register, no HUD beyond the one-line readback.
+- Active state: the frame defines register, roles, vocabulary, and the HUD
+  spec. HUD fields derive from real state where possible; do not invent them.
+- Lifecycle: adopt -> industrialize -> distill -> retire. Retirement criteria
+  are fixed at adoption. See `docs/internal/campaign/README.md`.
+- Precedence: the Operator's fluency protocol governs whether AI acts; this
+  contract governs how agents work; the campaign governs voice. A campaign
+  register never overrides enforcement or the fluency protocol [SD-331].
+- Archived campaigns live in `docs/internal/campaign/archive/` with their
+  frame, distillation, and retro. The archive is append-only [SD-266].
+
+## Layer 3: Reference Modules
+
+Not part of the first-pass boot load. Read only when needed.
+
+### Recent Orientation
 
 Standing:
 
@@ -219,7 +247,6 @@ Standing:
 - SD-266 immutable chain
 - SD-268 agentic estimation
 - SD-278 pilot over
-- SD-286 slopodar boot
 - SD-297 forward-ref decision collisions
 - SD-309 hired = proof > claim
 - SD-310 `uv` only
@@ -229,19 +256,21 @@ Standing:
 - SD-325 no stash
 - SD-326 discipline beats swarm
 - SD-328 tech-debt exposure through layered review
+- SD-329 slopodar superseded by product failure taxonomy (supersedes SD-286 boot read)
+- SD-330 run pipeline abandoned; core product refocus
+- SD-331 layered boot with campaign overlay
 
 Use `docs/internal/session-decisions-index.yaml` for current summaries.
 
-## Reference Modules
-
-These are not part of the first-pass boot load. Read them only when needed.
+### Modules
 
 - `docs/internal/session-decisions-index.yaml` - current standing orders and recent decisions
-- `docs/internal/session-decisions.md` - full historical chain and provenance
-- `docs/internal/lexicon.md` - full vocabulary
-- `docs/internal/layer-model.md` - full operational model
-- `docs/internal/slopodar.yaml` - anti-pattern taxonomy
-- `scripts/darkcat.md` and `docs/internal/weaver/` - adversarial review materials
+- `docs/deep-archive/2026-03-27-roadmap-sweep/docs/internal/session-decisions.md` - full historical chain and provenance
+- `docs/deep-archive/2026-03-27-roadmap-sweep/docs/internal/lexicon.md` - full vocabulary (v0.27, distilled)
+- `docs/deep-archive/2026-03-27-roadmap-sweep/docs/internal/layer-model.md` - full operational model (L0-L12)
+- `docs/internal/slopodar.yaml` - anti-pattern taxonomy (historical; see SD-329)
+- `docs/internal/weaver/` - adversarial review materials
+- `docs/internal/campaign/archive/` - retired campaign frames and retros
 - `.claude/agents/*.md` - role-specific instructions
 
 ## What This File Is Not

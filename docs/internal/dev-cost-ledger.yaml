@@ -11,3 +11,10 @@ entries:
     model_calls_estimate: 60
     failures_caught: 7
     notes: "Spec writing (3 phases), roadmap, reviewer briefing, README rewrite, OpenHands evaluation, 2 rounds adversarial review (7 findings resolved), on-product governance spec"
+  - date: "2026-07-04"
+    pr: null
+    milestone: "SD-331 campaign-overlay boot"
+    agent_minutes: 45
+    model_calls_estimate: 12
+    failures_caught: 0
+    notes: "Governance excavation (3 parallel readers over thepit + noopit + midgets), AGENTS.md layered restructure, campaign lifecycle + naval archive, SessionStart hook, chain/event/backlog bookkeeping. Issue #152."
