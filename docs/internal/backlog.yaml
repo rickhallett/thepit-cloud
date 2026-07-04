@@ -49,7 +49,8 @@
   epic: null
   created: '2026-03-09T09:53:25.454394+00:00'
   closed: '2026-03-12T14:00:00+00:00'
-  reason: 'Signal killed SD-321. Adversarial test completed SD-320: shorthand >= signal with 14% smaller size.'
+  reason: 'Signal killed SD-321. Adversarial test completed SD-320: shorthand >= signal
+    with 14% smaller size.'
 - id: BL-007
   title: 'Blog publish scheduler: script to flip draft=false on posts by date. Hugo
     renders future-dated draft=false pages only with buildFuture=true. Need either
@@ -175,5 +176,28 @@
   - code-health
   epic: null
   created: '2026-03-16T09:30:00.000000+00:00'
+  closed: null
+  reason: null
+- id: BL-016
+  title: 'Restructure boot contract into layered kernel + campaign overlay (SD-331,
+    #152)'
+  status: closed
+  priority: high
+  tags:
+  - infra
+  epic: null
+  created: '2026-07-04T09:02:01.767374+01:00'
+  closed: '2026-07-04T09:02:15.033154+01:00'
+  reason: 'Done in chore/152-boot-campaign-overlay: AGENTS.md layered, campaign overlay
+    + naval archive landed, hook wired. SD-331.'
+- id: BL-017
+  title: Fix pre-existing auth-bypass gate failures (SEC-AUTH-003/005 expect 401,
+    get 404)
+  status: open
+  priority: high
+  tags:
+  - bug
+  epic: null
+  created: '2026-07-04T09:04:42.299805+01:00'
   closed: null
   reason: null
