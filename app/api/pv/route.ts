@@ -11,6 +11,7 @@ import { log } from '@/lib/logger';
 import { errorResponse, parseValidBody, API_ERRORS } from '@/lib/api-utils';
 import { pageViewSchema } from '@/lib/api-schemas';
 import { withLogging } from '@/lib/api-logging';
+import { isDatabasePageViewStorageEnabled } from '@/lib/database-page-views';
 import { serverTrack } from '@/lib/posthog-server';
 import { recordPageView } from '@/lib/submissions';
 
@@ -62,21 +63,23 @@ async function rawPOST(req: Request) {
   const ipHash = payload.clientIp ? await sha256Hex(payload.clientIp) : null;
 
   try {
-    await recordPageView({
-      path: path.slice(0, 512),
-      userId,
-      sessionId: sessionId.slice(0, 32),
-      referrer: payload.referrer?.slice(0, 1024) || null,
-      userAgent: payload.userAgent?.slice(0, 512) || null,
-      ipHash,
-      utmSource,
-      utmMedium,
-      utmCampaign,
-      utmTerm,
-      utmContent,
-      country: payload.country?.slice(0, 2) || null,
-      copyVariant,
-    });
+    if (isDatabasePageViewStorageEnabled()) {
+      await recordPageView({
+        path: path.slice(0, 512),
+        userId,
+        sessionId: sessionId.slice(0, 32),
+        referrer: payload.referrer?.slice(0, 1024) || null,
+        userAgent: payload.userAgent?.slice(0, 512) || null,
+        ipHash,
+        utmSource,
+        utmMedium,
+        utmCampaign,
+        utmTerm,
+        utmContent,
+        country: payload.country?.slice(0, 2) || null,
+        copyVariant,
+      });
+    }
     // --- Analytics: session_started (OCE-254) ---
     // Fire on the first page view of a new session to enable retention cohorts.
     // serverTrack uses captureImmediate - completes HTTP request before returning.

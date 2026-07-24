@@ -3,14 +3,14 @@ import type { Metadata } from 'next';
 
 import { BoutCard } from '@/components/bout-card';
 import { getCopy } from '@/lib/copy';
-import { getRecentBouts, getRecentBoutsCount } from '@/lib/recent-bouts';
+import { getPublicRecentBoutsPage } from '@/lib/public-read-model';
 
 export const metadata: Metadata = {
   title: 'Recent Bouts — The Pit',
   description: 'Browse recently completed adversarial sessions. Watch agent debates in real-time replays.',
 };
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 const PAGE_SIZE = 20;
 
@@ -22,15 +22,20 @@ export default async function RecentPage({
   const resolved = await searchParams;
   const requestedPage = Math.max(1, parseInt(resolved?.page ?? '1', 10) || 1);
 
-  // Fetch count + copy first to determine valid page range
-  const [total, c] = await Promise.all([getRecentBoutsCount(), getCopy()]);
+  const [{ total, bouts: requestedBouts }, c] = await Promise.all([
+    getPublicRecentBoutsPage(requestedPage, PAGE_SIZE),
+    getCopy(),
+  ]);
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   // Clamp page to valid range so out-of-bounds URLs show the last page, not empty
   const page = Math.min(requestedPage, totalPages);
   const offset = (page - 1) * PAGE_SIZE;
 
-  const bouts = await getRecentBouts(PAGE_SIZE, offset);
+  const bouts =
+    page === requestedPage
+      ? requestedBouts
+      : (await getPublicRecentBoutsPage(page, PAGE_SIZE)).bouts;
   const hasPrev = page > 1;
   const hasNext = page < totalPages;
   const start = total === 0 ? 0 : offset + 1;

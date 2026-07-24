@@ -177,3 +177,13 @@
   created: '2026-03-16T09:30:00.000000+00:00'
   closed: null
   reason: null
+- id: BL-016
+  title: Reduce Neon wake time for anonymous traffic
+  status: open
+  priority: high
+  tags:
+  - infra
+  epic: null
+  created: '2026-07-24T12:54:23.607645+01:00'
+  closed: null
+  reason: null

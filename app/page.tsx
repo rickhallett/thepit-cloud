@@ -9,8 +9,8 @@ import { IntroPoolCounter } from '@/components/intro-pool-counter';
 import { NewsletterSignup } from '@/components/newsletter-signup';
 import { SITE_DESCRIPTION } from '@/lib/brand';
 import { CREDITS_ENABLED } from '@/lib/credits';
-import { getIntroPoolStatus } from '@/lib/intro-pool';
 import { getCopy } from '@/lib/copy';
+import { getPublicIntroPoolStatus } from '@/lib/public-read-model';
 
 export const metadata = {
   title: 'The Pit — Live field notes from inside multi-agent AI research',
@@ -20,7 +20,7 @@ export const metadata = {
 /** Server-rendered landing page with hero, presets, pricing, and research stats. */
 export default async function LandingPage() {
   const [poolStatus, c, { userId }] = await Promise.all([
-    CREDITS_ENABLED ? getIntroPoolStatus() : Promise.resolve(null),
+    CREDITS_ENABLED ? getPublicIntroPoolStatus() : Promise.resolve(null),
     getCopy(),
     auth(),
   ]);
@@ -432,5 +432,4 @@ function PlanCard({
     </div>
   );
 }
-
 

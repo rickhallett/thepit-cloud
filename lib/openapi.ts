@@ -366,19 +366,43 @@ export const spec = {
     '/api/health': {
       get: {
         operationId: 'healthCheck',
-        summary: 'Health check',
-        description: 'Lightweight health check returning service status, database connectivity, and enabled feature flags.',
+        summary: 'Liveness check',
+        description: 'Process liveness check that does not contact external dependencies.',
         tags: ['System'],
         responses: {
           '200': {
-            description: 'Service healthy.',
+            description: 'Application process is alive.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
                   properties: {
-                    status: { type: 'string', enum: ['ok', 'degraded'] },
+                    status: { type: 'string', enum: ['ok'] },
                     startedAt: { type: 'string', format: 'date-time' },
+                    timestamp: { type: 'string', format: 'date-time' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/api/readiness': {
+      get: {
+        operationId: 'readinessCheck',
+        summary: 'Readiness check',
+        description: 'Dependency readiness check that verifies database connectivity.',
+        tags: ['System'],
+        responses: {
+          '200': {
+            description: 'Service dependencies are ready.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: { type: 'string', enum: ['ready', 'not_ready'] },
                     timestamp: { type: 'string', format: 'date-time' },
                     database: {
                       type: 'object',
@@ -387,22 +411,14 @@ export const spec = {
                         latencyMs: { type: 'number' },
                       },
                     },
-                    features: {
-                      type: 'object',
-                      properties: {
-                        subscriptions: { type: 'boolean' },
-                        credits: { type: 'boolean' },
-                        byok: { type: 'boolean' },
-                        eas: { type: 'boolean' },
-                        askThePit: { type: 'boolean' },
-                      },
-                    },
                   },
                 },
               },
             },
           },
-          '503': { description: 'Service degraded (database unreachable).' },
+          '503': {
+            description: 'Service dependencies are not ready.',
+          },
         },
       },
     },

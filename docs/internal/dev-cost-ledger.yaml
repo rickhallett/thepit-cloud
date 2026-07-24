@@ -11,3 +11,10 @@ entries:
     model_calls_estimate: 60
     failures_caught: 7
     notes: "Spec writing (3 phases), roadmap, reviewer briefing, README rewrite, OpenHands evaluation, 2 rounds adversarial review (7 findings resolved), on-product governance spec"
+  - date: "2026-07-24"
+    pr: null
+    milestone: "GH-155 Neon wake cost control"
+    agent_minutes: 25
+    model_calls_estimate: 35
+    failures_caught: 2
+    notes: "Added the public read model, liveness and readiness split, database page-view gate, documentation, and tests. Full gate passed with 1538 tests; 29 database-dependent tests skipped because TEST_DATABASE_URL was unavailable."

@@ -19,7 +19,7 @@ import {
   getCreditTransactions,
   getCreditBalanceMicro,
 } from '@/lib/credits';
-import { getIntroPoolStatus } from '@/lib/intro-pool';
+import { getPublicIntroPoolStatus } from '@/lib/public-read-model';
 // free-bout-pool import removed — replaced by intro pool half-life
 import {
   SUBSCRIPTIONS_ENABLED,
@@ -58,7 +58,7 @@ export default async function ArenaPage() {
       subsEnabled && userId ? getUserTier(userId) : Promise.resolve(null),
       creditsEnabled && userId ? getCreditBalanceMicro(userId) : Promise.resolve(null),
       creditsEnabled && userId ? getCreditTransactions(userId, 12) : Promise.resolve([] as Awaited<ReturnType<typeof getCreditTransactions>>),
-      creditsEnabled ? getIntroPoolStatus() : Promise.resolve(null),
+      creditsEnabled ? getPublicIntroPoolStatus() : Promise.resolve(null),
     ]);
 
   // Tier-dependent follow-up (needs userTier result)
