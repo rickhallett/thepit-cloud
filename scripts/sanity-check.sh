@@ -140,6 +140,7 @@ echo ""
 
 echo -e "${BOLD}[1/8] Health & Infrastructure${RESET}"
 check_route GET "/api/health" 200 "GET /api/health" 2
+check_route GET "/api/readiness" 200 "GET /api/readiness" 2
 
 # ── 2. Static / meta routes ─────────────────────────────────────────
 

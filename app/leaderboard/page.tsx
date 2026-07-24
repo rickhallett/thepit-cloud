@@ -1,12 +1,15 @@
 import { LeaderboardDashboard } from '@/components/leaderboard-dashboard';
 import { TrackPageEvent } from '@/components/track-page-event';
 import { getCopy } from '@/lib/copy';
-import { getLeaderboardData } from '@/lib/leaderboard';
+import { getPublicLeaderboardData } from '@/lib/public-read-model';
 
-export const revalidate = 30;
+export const revalidate = 3600;
 
 export default async function LeaderboardPage() {
-  const [data, c] = await Promise.all([getLeaderboardData(), getCopy()]);
+  const [data, c] = await Promise.all([
+    getPublicLeaderboardData(),
+    getCopy(),
+  ]);
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-background text-foreground">

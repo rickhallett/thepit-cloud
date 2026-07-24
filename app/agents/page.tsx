@@ -2,13 +2,13 @@ import Link from 'next/link';
 
 import { AgentsCatalog } from '@/components/agents-catalog';
 import { TrackPageEvent } from '@/components/track-page-event';
-import { getAgentSnapshots } from '@/lib/agent-registry';
 import { getCopy } from '@/lib/copy';
 import { ALL_PRESETS } from '@/lib/presets';
+import { getPublicAgentSnapshots } from '@/lib/public-read-model';
 
 export default async function AgentsPage() {
   const c = await getCopy();
-  const agents = await getAgentSnapshots();
+  const agents = await getPublicAgentSnapshots();
   const presets = ALL_PRESETS.map((preset) => ({
     id: preset.id,
     name: preset.name,

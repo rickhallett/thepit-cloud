@@ -162,6 +162,7 @@ const serverEnvSchema = z.object({
   ANOMALY_WEBHOOK_URL: z.string().optional(),
 
   // --- Analytics ---
+  DATABASE_PAGE_VIEWS_ENABLED: boolFlag,
   PV_INTERNAL_SECRET: z.string().optional(),
 
   // --- Distributed cache (Upstash Redis) ---
